@@ -1,0 +1,22 @@
+{
+  "name": "pong",
+  "version": "1.0.0",
+  "description": "Game of Pong made using Phraser library & implements Reinford Learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aamir1551/Pong.git"
+  },
+  "author": "Aamir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aamir1551/Pong/issues"
+  },
+  "homepage": "https://github.com/Aamir1551/Pong#readme",
+  "dependencies": {
+    "phaser": "^3.16.2"
+  }
+}
