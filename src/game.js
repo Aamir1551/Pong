@@ -17,5 +17,8 @@ var config = {
 let game = new Phaser.Game(config);
 
 game.scene.add('boot', BootState);
+game.scene.add('load', LoadState);
+game.scene.add('menu', MenuState);
+
 game.scene.start('boot');
 
