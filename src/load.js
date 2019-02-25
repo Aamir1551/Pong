@@ -3,15 +3,15 @@ class LoadState extends Phaser.Scene {
         super({key:'load'})
     }
 
-    loadImage(fileName) {
+    loadImage(fileName, keys) {
         for(let i =0;i<fileName.length;i++){
-            this.load.image('../assets/' + fileName[i]);
-            console.log('../assets/' + fileName[i]) ;
+            this.load.image(keys[i], '../assets/' + fileName[i]);
         }
     }
 
     preload() {
-        this.loadImage(["fancy-ball.png", "fancy-court.png", "fancy-paddle-green.png"])
+        this.loadImage(["fancy-ball.png", "fancy-court.png", "fancy-paddle-green.png"],
+            ["ball", "court", "paddle"])
 
     }
 

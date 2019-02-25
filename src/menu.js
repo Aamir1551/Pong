@@ -7,5 +7,6 @@ class MenuState extends Phaser.Scene{
     create() {
         console.log("we are on start");
 
+        game.scene.start('play');
     }
 }

@@ -1,6 +1,7 @@
 class BootState extends Phaser.Scene {
     constructor() {
-        super({key:"boot"})
+        // TODO check if super({key:"boot"}) really makes a difference
+        super({key:"boot"}) //This stuff doesnt matter
     }
 
     preload() {
