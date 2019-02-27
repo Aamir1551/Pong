@@ -25,6 +25,23 @@ class PlayState extends Phaser.Scene {
         this.ball.setBounce(1);
         this.ball.setVelocity(-700, 500);
 
+        this.ball.body.onWorldBounds = true;
+
+        //this.ball.body.offset()
+
+        // TODO check if bounds is corrects and start with ML NOW!!!
+        this.ball.body.world.on('worldbounds', function(body) {
+            //console.log(600 - this.height);
+            //console.log("spl");
+            //console.log(this.y);
+            if(body.gameObject === this && !(this.y > (600 - this.height) ) && !(this.y < this.height) ) {
+                this.x = 400;
+                console.log(this.y);
+                this.y = 300;
+                this.setVelocity(-700, 500);
+            }
+        }, this.ball);
+
         this.ball.setCollideWorldBounds(true);
         this.paddle1.setCollideWorldBounds(true);
         this.paddle2.setCollideWorldBounds(true);
@@ -33,6 +50,8 @@ class PlayState extends Phaser.Scene {
         this.paddle2.setImmovable(true);
 
     }
+
+
 
     update() {
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -65,5 +84,5 @@ class PlayState extends Phaser.Scene {
     };
 
     //to view this scene from js console write game.scene.scenes[3].stopM
-
+    //game.scene.scene[3].game.config.height is how you refer to height property in game object
 }
