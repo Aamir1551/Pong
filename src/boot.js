@@ -6,7 +6,7 @@ class BootState extends Phaser.Scene {
 
     preload() {
         //console.log("checking if everything is working")
-        game.scene.start('load')
+        this.scene.start('load');
     }
 
 }

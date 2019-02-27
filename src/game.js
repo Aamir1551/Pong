@@ -6,20 +6,12 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: {y: 0},
+            //gravity: {y: 0},
             debug: false
         }
 
     },
+    scene : [BootState, LoadState, MenuState, PlayState]
 };
 
-
 let game = new Phaser.Game(config);
-
-game.scene.add('boot', BootState);
-game.scene.add('load', LoadState);
-game.scene.add('menu', MenuState);
-game.scene.add('play', PlayState);
-
-game.scene.start('boot');
-
