@@ -18,10 +18,19 @@ class Agent {
         }
 
         //pick action which maximises the reward
+        let maxReward = Number.NEGATIVE_INFINITY;
+        let actionNum = -1;
+        let newState = -1;
+
         for(let i = 0;i<this.game[s.toString()]; i++) {
-            let maxReward = float("-inf");
-            let actionNum = -1;
-             
+            if(this.game[s.toString()][i][2] > maxReward) {
+                let params = this.game[s.toString()][i]
+                maxReward = params[2];
+                actionNum = params[0];
+                newState = params[1];
+
+            }
+
         }
     }
 
