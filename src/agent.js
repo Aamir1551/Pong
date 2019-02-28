@@ -1,9 +1,7 @@
 class Agent {
     constructor(qtabeleDim) {
-        this.dims = qtabeleDim;
-        this.qtable = {};
         this.game = {};
-        this.rewards = {};
+        this.qtable = {};
 
         this.explorationRate = 1;
         this.l_r = 0.8;
@@ -13,8 +11,9 @@ class Agent {
     //chooseAct takes in a state and an actionCount
     //actionCount refers to the maximum number of actions that can be executed at state s
     chooseAct(s, actCount) { //choose random action or choose action with best reward -- problem: how many actions are there?
-        if(this.game[s.toString()].length === 0 || Math.random() < this.explorationRate) {
-            this.chooseRandomAction(s, actCount);
+        //if the state has never been visited or we choose to explore then choose a random action
+        if( (!this.game.hasOwnProperty(s.toString())) || Math.random() < this.explorationRate) {
+            return this.chooseRandomAction(s, actCount);
         }
 
         //pick action which maximises the reward
@@ -24,22 +23,29 @@ class Agent {
 
         for(let i = 0;i<this.game[s.toString()]; i++) {
             if(this.game[s.toString()][i][2] > maxReward) {
-                let params = this.game[s.toString()][i]
-                maxReward = params[2];
-                actionNum = params[0];
+                let params = this.game[s.toString()][i];
+                actionNum = i;
+                maxReward = params[0];
                 newState = params[1];
-
             }
 
         }
+        return [actionNum, maxReward, newState];
     }
 
     chooseRandomAction(s, actCount) {
+       let actionNum =  Math.floor(Math.random() * actCount);
+       let params = this.game[s.toString()][actionNum];
+       let maxReward = params[0];
+       let newState = params[1];
+       return[actionNum, maxReward, newState] ;
+    }
+
+    updateQtable(state, action, reward, nxtState) {
 
     }
 
-    getReward(s, action) {}
-
+    
 
 
 }
