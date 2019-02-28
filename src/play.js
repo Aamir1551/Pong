@@ -39,6 +39,7 @@ class PlayState extends Phaser.Scene {
         this.ai = new Agent();
         this.explorationRate = 0.9;
         this.score = 0;
+        this.highScore = 0;
 
         this.addSprites();
         this.setPhysics();
@@ -47,6 +48,9 @@ class PlayState extends Phaser.Scene {
         this.ball.body.world.on('worldbounds', function(body) {
             if(body.gameObject === this && !(this.y > (600 - this.height) ) && !(this.y < this.height) ) {
                 this.scene.ai.updateQtable([this.scene.paddle1.x, Math.round(this.scene.ball.x), Math.round(this.scene.ball.y)], -100, 0.6, 0.9, 0);
+                if(this.scene.score > this.scene.highScore) {
+                    this.scene.highScore = this.scene.score;
+                }
                 this.scene.score = 0;
                 this.scene.scoreText.setText('Score: ' + this.scene.score);
                 this.x = 400;
