@@ -1,51 +1,39 @@
 class Agent {
-    constructor(qtabeleDim) {
-        this.game = {};
+    constructor() {
         this.qtable = {};
-
-        this.explorationRate = 1;
-        this.l_r = 0.8;
-        this.discountRate = 0.8
     }
 
     //chooseAct takes in a state and an actionCount
     //actionCount refers to the maximum number of actions that can be executed at state s
-    chooseAct(s, actCount) { //choose random action or choose action with best reward -- problem: how many actions are there?
+    chooseAct(s, actCount, explorationRate) { //choose random action or choose action with best reward -- problem: how many actions are there?
         //if the state has never been visited or we choose to explore then choose a random action
-        if( (!this.game.hasOwnProperty(s.toString())) || Math.random() < this.explorationRate) {
-            return this.chooseRandomAction(s, actCount);
+        if(Math.random() < explorationRate) {
+            return Agent.chooseRandomAction(actCount);
         }
 
-        //pick action which maximises the reward
+        //pick action which maximises the expected reward
         let maxReward = Number.NEGATIVE_INFINITY;
         let actionNum = -1;
-        let newState = -1;
 
-        for(let i = 0;i<this.game[s.toString()]; i++) {
-            if(this.game[s.toString()][i][2] > maxReward) {
-                let params = this.game[s.toString()][i];
+        for(let i = 0;i<actCount; i++) {
+            let currentActions = this.qtable[s.toString()]; //stores the current actions that can be performed in the given state s
+            if(currentActions[i] > maxReward) {
                 actionNum = i;
-                maxReward = params[0];
-                newState = params[1];
+                maxReward = currentActions[i];
             }
 
         }
-        return [actionNum, maxReward, newState];
+        return actionNum;
     }
 
-    chooseRandomAction(s, actCount) {
+    static chooseRandomAction(actCount) {
        let actionNum =  Math.floor(Math.random() * actCount);
-       let params = this.game[s.toString()][actionNum];
-       let maxReward = params[0];
-       let newState = params[1];
-       return[actionNum, maxReward, newState] ;
+       return actionNum;
     }
 
-    updateQtable(state, action, reward, nxtState) {
-
+    updateQtable(state, action, reward, discountRate, maxNxtReward, learningRate) {
+        let qvalue = this.qtable[state.toString()][action];
+        let delta_qvalue = reward + discountRate * maxNxtReward - qvalue;
+        this.qtable[state.toString()][action] += learningRate * delta_qvalue ;
     }
-
-    
-
-
 }

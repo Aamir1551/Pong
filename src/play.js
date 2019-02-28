@@ -78,6 +78,12 @@ class PlayState extends Phaser.Scene {
         this.setControls();
         this.scoreText.setText('Score: ' + this.score);
         this.paddle2.y = this.ball.y;
+
+        //TODO paddle1 is going to call agent to perform an action
+        //TODO agent is going to perform an action
+        //TODO agent returns action and then ask enviornment to give the rewrd(which will be through the update qtable function)
+        
+
     };
 
     //to view this scene from js console write game.scene.scenes[3].stopM
