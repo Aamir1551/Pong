@@ -36,7 +36,8 @@ class PlayState extends Phaser.Scene {
 
     create() {
 
-
+        this.ai = new Agent();
+        this.explorationRate = 0.9;
         this.score = 0;
 
         this.addSprites();
@@ -45,6 +46,7 @@ class PlayState extends Phaser.Scene {
 
         this.ball.body.world.on('worldbounds', function(body) {
             if(body.gameObject === this && !(this.y > (600 - this.height) ) && !(this.y < this.height) ) {
+                this.scene.ai.updateQtable([this.scene.paddle1.x, Math.round(this.scene.ball.x), Math.round(this.scene.ball.y)], -100, 0.6, 0.9, 0);
                 this.scene.score = 0;
                 this.scene.scoreText.setText('Score: ' + this.scene.score);
                 this.x = 400;
@@ -82,8 +84,15 @@ class PlayState extends Phaser.Scene {
         //TODO paddle1 is going to call agent to perform an action
         //TODO agent is going to perform an action
         //TODO agent returns action and then ask enviornment to give the rewrd(which will be through the update qtable function)
-        
 
+        let currentState = [this.paddle1.y, Math.round(this.ball.x), Math.round(this.ball.y)];
+        this.ai.chooseAct(currentState, 2, this.explorationRate);
+        if(this.ai.actionChosen === 0) {
+            this.paddle1.setVelocityY(-300);
+        } else {
+            this.paddle1.setVelocityY(300);
+        }
+        this.ai.updateQtable(currentState, 1, 0.6, 0.9, this.ai.maxExpectedReward([this.paddle1.y, Math.round(this.ball.x), Math.round(this.ball.y)]))
     };
 
     //to view this scene from js console write game.scene.scenes[3].stopM
