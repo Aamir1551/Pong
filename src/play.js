@@ -37,7 +37,8 @@ class PlayState extends Phaser.Scene {
     create() {
 
         this.ai = new Agent();
-        this.explorationRate = 0.9;
+        this.explorationRate = 1;
+        this.discountRate = 0.9;
         this.score = 0;
         this.highScore = 0;
 
@@ -47,7 +48,7 @@ class PlayState extends Phaser.Scene {
 
         this.ball.body.world.on('worldbounds', function(body) {
             if(body.gameObject === this && !(this.y > (600 - this.height) ) && !(this.y < this.height) ) {
-                this.scene.ai.updateQtable([this.scene.paddle1.x, Math.round(this.scene.ball.x), Math.round(this.scene.ball.y)], -100, 0.6, 0.9, 0);
+                this.scene.ai.updateQtable([this.scene.paddle1.x, Math.round(this.scene.ball.x), Math.round(this.scene.ball.y)], -1000, 0.6, 0.9, 0);
                 if(this.scene.score > this.scene.highScore) {
                     this.scene.highScore = this.scene.score;
                 }
@@ -96,7 +97,7 @@ class PlayState extends Phaser.Scene {
         } else {
             this.paddle1.setVelocityY(300);
         }
-        this.ai.updateQtable(currentState, 1, 0.6, 0.9, this.ai.maxExpectedReward([this.paddle1.y, Math.round(this.ball.x), Math.round(this.ball.y)]))
+        this.ai.updateQtable(currentState, 1, this.discountRate, 0.9, this.ai.maxExpectedReward([this.paddle1.y, Math.round(this.ball.x), Math.round(this.ball.y)]))
     };
 
     //to view this scene from js console write game.scene.scenes[3].stopM

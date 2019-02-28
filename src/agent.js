@@ -4,27 +4,28 @@ class Agent {
         this.actionChosen = -1;
     }
 
-    //chooseAct takes in a state and an actionCount
-    //actionCount refers to the maximum number of actions that can be executed at state s
-    chooseAct(s, actCount, explorationRate) { //choose random action or choose action with best reward -- problem: how many actions are there?
+    //chooseAct takes in a state, the maximum number of actions that can be performed at state s and explorationRate
+    //choose random action or choose action with best reward
+    chooseAct(s, actCount, explorationRate) {
         //if the state has never been visited or we choose to explore then choose a random action
-        if( !(this.qtable.hasOwnProperty(s.toString())) ||Math.random() < explorationRate) {
-            return this.chooseRandomAction(actCount);
+        if( !(this.qtable.hasOwnProperty(s.toString())) || Math.random() < explorationRate) {
+            console.log("random action has been performed");
+            this.chooseRandomAction(actCount);
+            return;
         }
 
+        console.log("smart choice");
         //pick action which maximises the expected reward
-        let maxReward = Number.NEGATIVE_INFINITY;
-        let actionNum = -1;
+        //we will loop over every action then choose the action which gives us the highest expected reward
+        let maxReward = Number.NEGATIVE_INFINITY; //this part is being repeated in maxExpectedReward TODO need to refactor
+        let actions = this.qtable[s.toString()];
 
-        for(let i = 0;i<actCount; i++) {
-            let currentActions = this.qtable[s.toString()]; //stores the current actions that can be performed in the given state s
-            if(currentActions[i] > maxReward) {
-                actionNum = i;
-                maxReward = currentActions[i];
+        Object.keys(actions).forEach(function(key) {
+            if(actions[key] > maxReward) {
+                maxReward = actions[key];
+                this.actionChosen = key;  //may need to refactor this part
             }
-
-        }
-        this.actionChosen = actionNum;
+        });
     }
 
     chooseRandomAction(actCount) {
@@ -32,27 +33,30 @@ class Agent {
     }
 
     maxExpectedReward(state) {
+        //if the qtable does not hold any set of actions for that state, then return 0 (as that state has not been visited_
         if(this.qtable[state.toString()] === undefined) {
             this.qtable[state.toString()] = {};
             return 0;
         }
-        let actions = this.qtable[state.toString()];
+        let actions = this.qtable[state.toString()]; //get all actions that can be performed at this state
         let maxReward = Number.NEGATIVE_INFINITY;
-        for(let i = 0;i<actions.length;i++) {
-            if(actions[i] > maxReward) {
-                maxReward = actions[i];
+
+        Object.keys(actions).forEach(function(key) {
+            if(actions[key] > maxReward) {
+                maxReward = actions[key]
             }
-        }
+        });
+
         return maxReward;
     }
 
     updateQtable(action, reward, discountRate, learningRate, rewardNextState) {
         if(this.qtable[this.actionChosen.toString()] === undefined) {
             this.qtable[this.actionChosen.toString()] = {};
-            this.qtable[this.actionChosen.toString()][action] = 0
+            this.qtable[this.actionChosen.toString()][action.toString()] = 0
         }
-        let qvalue = this.qtable[this.actionChosen.toString()][action];
+        let qvalue = this.qtable[this.actionChosen.toString()][action.toString()];
         let delta_qvalue = reward + discountRate * (rewardNextState) - qvalue;
-        this.qtable[this.actionChosen.toString()][action] += learningRate * delta_qvalue ;
+        this.qtable[this.actionChosen.toString()][action.toString()] += learningRate * delta_qvalue ;
     }
 }
